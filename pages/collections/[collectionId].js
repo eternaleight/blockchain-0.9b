@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useWeb3 } from '@3rdweb/hooks';
+import { ThirdwebWeb3Provider, useWeb3 } from '@3rdweb/hooks';
 
 const style = {
   bannerImageContainer: `h-[20vh] w-screen overflow-hidden flex justify-center items-center`,
@@ -34,6 +34,25 @@ const Collection = () => {
   const [nfts, setNfts] = useState([])
   const [listings, setListings] = useState([])
 
+  const nftModule = useMemo(() => {
+    if (!provider) return
+
+    const sdk = new ThirdwebSDK(
+      provider.getSigner(),
+    )
+    //https://eth-rinkeby.alchemyapi.io/v2/1bMHon_aD3uxtZLhwKs1QylE3XI0IpjF
+    return sdk.getNFTModule
+  }, [provider])
+
+  // get all NFTs in the collection
+  useEffect(() => {
+    if (!nftModule) return
+      ; (async () => {
+        const nfts = await nftModule.getAll()
+
+        setNfts(nfts)
+      })()
+  }, [nftModule])
 
   nsole.log(router.query)
   nsole.log(router.query.collectionId)
@@ -44,4 +63,4 @@ const Collection = () => {
   );
 }
 
-export default Collection;
+export default Collection
