@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react';
-import React from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { ThirdwebWeb3Provider, useWeb3 } from '@3rdweb/hooks';
+import React, { useEffect, useState, useMemo } from 'react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { useWeb3 } from '@3rdweb/hooks'
+import { client } from '../../lib/sanityClient'
+import { ThirdwebSDK } from '@3rdweb/sdk'
+import Header from '../../components/Header'
+import { CgWebsite } from 'react-icons/cg'
+import { AiOutlineInstagram } from 'react-icons/ai'
 
 const style = {
   bannerImageContainer: `h-[20vh] w-screen overflow-hidden flex justify-center items-center`,
@@ -34,14 +38,20 @@ const Collection = () => {
   const [nfts, setNfts] = useState([])
   const [listings, setListings] = useState([])
 
+  // Alchemy Opensea Blockchain Clone APIkey HTTP
+  // https://eth-rinkeby.alchemyapi.io/v2/1bMHon_aD3uxtZLhwKs1QylE3XI0IpjF
+
+  //OpenseaMarketplace Address
+  //0xe69Bf031fd540881F668294a73A9eC14aC226415
+
   const nftModule = useMemo(() => {
     if (!provider) return
 
     const sdk = new ThirdwebSDK(
       provider.getSigner(),
+      'https://eth-rinkeby.alchemyapi.io/v2/1bMHon_aD3uxtZLhwKs1QylE3XI0IpjF'
     )
-    //https://eth-rinkeby.alchemyapi.io/v2/1bMHon_aD3uxtZLhwKs1QylE3XI0IpjF
-    return sdk.getNFTModule
+    return sdk.getNFTModule(collectionId)
   }, [provider])
 
   // get all NFTs in the collection
@@ -54,13 +64,96 @@ const Collection = () => {
       })()
   }, [nftModule])
 
-  nsole.log(router.query)
-  nsole.log(router.query.collectionId)
-  turn(
-    <Link href="/">
-      <h2>{router.query.collectionId}</h2>
-    </Link>
-  );
+  const marketPlaceModule = useMemo(() => {
+    if (!provider) return
+
+    const sdk = new ThirdwebSDK(
+      provider.getSigner(),
+      'https://eth-rinkeby.alchemyapi.io/v2/1bMHon_aD3uxtZLhwKs1QylE3XI0IpjF'
+    )
+    return sdk.getMarketplaceModule(
+      '0xe69Bf031fd540881F668294a73A9eC14aC226415'
+    )
+  }, [provider])
+
+  // get all listings in the collection
+  useEffect(() => {
+    if (!marketPlaceModule) return
+      ; (async () => {
+        setListings(await marketPlaceModule.getAllListings())
+      })()
+  }, [marketPlaceModule])
+
+  const fetchCollectionData = async (sanityClient = client) => {
+    const query = `*[_type == "marketItems" && contractAddress == "${collectionId}" ] {
+      "imageUrl": profileImage.asset->url,
+      "bannerImageUrl": bannerImage.asset->url,
+      volumeTraded,
+      createdBy,
+      contractAddress,
+      "creator": createdBy->userName,
+      title, floorPrice,
+      "allOwners": owners[]->,
+      description
+    }`
+
+    const collectionData = await sanityClient.fetch(query)
+
+    console.log(collectionData, '🔥')
+
+    // the query returns 1 object inside of an array
+    await setCollection(collectionData[0])
+  }
+
+  useEffect(() => {
+    fetchCollectionData()
+  }, [collectionId])
+
+  console.log(router.query)
+  console.log(router.query.collectionId)
+  return (
+    <div className='overflow-hidden'>
+      <Header />
+      <div className={style.bannerImageContainer}>
+        <img className={style.bannerImage}
+          src={
+            collection?.bannerImageUrl
+              ? collection.bannerImageUrl
+              : 'https://via.placeholder.com/200'
+          }
+          alt="banner"
+        />
+      </div>
+      <div className={style.infoContainer}>
+        <div className={style.midRow}>
+          <img className={style.profileImg}
+            src={
+              collection?.imageUrl
+                ? collection.imageUrl
+                : 'https://via.placeholder.com/200'
+            }
+            alt="profile image"
+          />
+        </div>
+        <div className={style.endRow}>
+          <div className={style.socialIconsContainer}>
+            <div className={style.socialIconsWrapper}>
+              <div className={style.socialIconsContent}>
+                <div className={style.socialIcon}>
+                  <CgWebsite />
+                </div>
+                <div className={style.divider}>
+                  <div className={style.socialIcon}>
+                    <AiOutlineInstagram />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Collection
