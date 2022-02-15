@@ -24,6 +24,15 @@ const NFTCard = ({ nftItem, title, listings }) => {
   const [price, setPrice] = useState(0)
 
   useEffect(() => {
+    const listing = listings.find((listing) => listing.asset.id === nftItem.id)
+    if (Boolean(listing)) {
+      setIsListed(true)
+      setPrice(listing.buyoutCurrencyValuePerToken.displayValue)
+    }
+  }, [listings, nftItem])
+
+
+  useEffect(() => {
     for (const listing of listings) {
       if (listing.asset.id === nftItem.id) {
         setIsListed(true)
@@ -37,7 +46,7 @@ const NFTCard = ({ nftItem, title, listings }) => {
     <div className={style.wrapper}
       onClick={() => {
         Router.push({
-          pathname: `/assets/${nftItem.id}`,
+          pathname: `/nfts/${nftItem.id}`,
           query: { isListed: isListed },
         })
       }}
@@ -48,8 +57,24 @@ const NFTCard = ({ nftItem, title, listings }) => {
       <div className={style.details}>
         <div className={style.info}>
           <div className={style.infoLeft}>
-    <div className={style.collectionName}>{title}</div>
+            <div className={style.collectionName}>{title}</div>
+            <div className={style.assetName}>{nftItem.name}</div>
           </div>
+          {isListed && (
+            <div className={style.infoRight}>
+              <div className={style.priceTag}>Price</div>
+              <div className={style.priceValue}>
+                <img src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" alt="eth" className={style.ethLogo} />
+                {price}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className={style.likes}>
+          <span className={style.likeIcon}>
+            <BiHeart />
+          </span>{' '}
+          {nftItem.likes}
         </div>
       </div>
     </div>

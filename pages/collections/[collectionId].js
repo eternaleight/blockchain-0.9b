@@ -9,7 +9,7 @@ import { CgWebsite } from 'react-icons/cg'
 import { AiOutlineInstagram, AiOutlineTwitter } from 'react-icons/ai'
 import { HiDotsVertical } from 'react-icons/hi'
 import { networkInterfaces } from 'os'
-import NFTcard from '../../components/NFTcard'
+import NFTCard from '../../components/NFTCard'
 
 
 const style = {
@@ -200,12 +200,12 @@ const Collection = () => {
           </div>
         </div>
         <div className={style.midRow}>
-          <div className={style.description}>
+          <div className={style.description}>{collection?.description}
           </div>
         </div>
         <div className="flex flex-wrap">
           {nfts.map((nftItem, id) => (
-            <NFTcard
+            <NFTCard
             key={id}
             nftItem={nftItem}
             title={collection?.title}
