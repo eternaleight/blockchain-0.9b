@@ -60,7 +60,7 @@ const Nft = () => {
   }, [marketPlaceModule])
 
   return (
-    <>
+    <div>
       <Header />
       <div className={style.wrapper}>
         <div className={style.container}>
@@ -68,10 +68,12 @@ const Nft = () => {
             <div className={style.nftImgContainer}>
               <NFTImage selectedNft={selectedNft} />
             </div>
+            <div className={style.detailsContainer}>
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
