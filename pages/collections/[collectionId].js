@@ -113,7 +113,7 @@ const Collection = () => {
     fetchCollectionData()
   }, [collectionId])
 
-  console.log(router.query)
+  console.log(router.query.nftId)
   console.log(router.query.collectionId)
   return (
     <div className='overflow-hidden'>

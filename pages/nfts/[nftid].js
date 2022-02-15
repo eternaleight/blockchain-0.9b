@@ -1,8 +1,7 @@
 import Header from "../../components/Header";
 import { useEffect, useState, useMemo } from "react";
-import { ThirdwebWeb3Provider, useWeb3 } from "@3rdweb/hooks";
+import { useWeb3 } from "@3rdweb/hooks";
 import { useRouter } from "next/router";
-import { MdOutlineDirtyLens, MdSignalCellularConnectedNoInternet0Bar } from "react-icons/md";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import NFTImage from "../../components/nft/NFTImage";
 
@@ -30,10 +29,12 @@ const Nft = () => {
     return sdk.getNFTModule('0xD9A85a98b352d1770d6a860A737f48037202c706')
   }, [provider])
 
+
   useEffect(() => {
     if (!nftModule) return
       ; (async () => {
         const nfts = await nftModule.getAll()
+
         const selectedNftItem = nfts.find(
           (nft) => nft.id === router.query.nftId)
 
@@ -61,7 +62,15 @@ const Nft = () => {
   return (
     <>
       <Header />
-      <NFTImage selectedNft={selectedNft}/>
+      <div className={style.wrapper}>
+        <div className={style.container}>
+          <div className={style.topContent}>
+            <div className={style.nftImgContainer}>
+              <NFTImage selectedNft={selectedNft} />
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
