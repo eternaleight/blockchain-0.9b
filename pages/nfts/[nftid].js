@@ -1,13 +1,12 @@
-import Header from "../../components/Header";
-import { useEffect, useState, useMemo } from "react";
-import { useWeb3 } from "@3rdweb/hooks";
-import { useRouter } from "next/router";
-import { ThirdwebSDK } from "@3rdweb/sdk";
-import NFTImage from "../../components/nft/NFTImage";
-import GeneralDetails from "../../components/nft/GeneralDetails";
-import ItemActivity from "../../components/nft/ItemActivity";
-import Purchase from "../../components/nft/Purchase";
-import { MdTakeoutDining } from "react-icons/md";
+import Header from '../../components/Header'
+import { useEffect, useMemo, useState } from 'react'
+import { useWeb3 } from '@3rdweb/hooks'
+import { ThirdwebSDK } from '@3rdweb/sdk'
+import { useRouter } from 'next/router'
+import NFTImage from '../../components/nft/NFTImage'
+import GeneralDetails from '../../components/nft/GeneralDetails'
+import ItemActivity from '../../components/nft/ItemActivity'
+import Purchase from '../../components/nft/Purchase'
 
 const style = {
   wrapper: `flex flex-col items-center container-lg text-[#e5e8eb]`,
@@ -33,14 +32,12 @@ const Nft = () => {
     return sdk.getNFTModule('0xD9A85a98b352d1770d6a860A737f48037202c706')
   }, [provider])
 
-
   useEffect(() => {
     if (!nftModule) return
       ; (async () => {
         const nfts = await nftModule.getAll()
 
-        const selectedNftItem = nfts.find(
-          (nft) => nft.id === router.query.nftId)
+        const selectedNftItem = nfts.find((nft) => nft.id === router.query.nftId)
 
         setSelectedNft(selectedNftItem)
       })()
@@ -75,10 +72,11 @@ const Nft = () => {
             <div className={style.detailsContainer}>
               <GeneralDetails selectedNft={selectedNft} />
               <Purchase
-                isLited={router.query.isLited}
+                isListed={router.query.isListed}
                 selectedNft={selectedNft}
                 listings={listings}
-                marketPlaceModule={marketPlaceModule}/>
+                marketPlaceModule={marketPlaceModule}
+              />
             </div>
           </div>
           <ItemActivity />

@@ -30,7 +30,7 @@ const GeneralDetails = ({ selectedNft }) => {
             Owned by <span className={style.accent}>eternaleight</span>
           </div>
           <div className={style.likes}>
-            <AiFillHeart className={style.likeIcon} />2.3K favorites
+            <AiFillHeart className={style.likeIcon} /> 2.3K favorites
           </div>
         </div>
       </div>
