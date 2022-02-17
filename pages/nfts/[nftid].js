@@ -6,6 +6,8 @@ import { ThirdwebSDK } from "@3rdweb/sdk";
 import NFTImage from "../../components/nft/NFTImage";
 import GeneralDetails from "../../components/nft/GeneralDetails";
 import ItemActivity from "../../components/nft/ItemActivity";
+import Purchase from "../../components/nft/Purchase";
+import { MdTakeoutDining } from "react-icons/md";
 
 const style = {
   wrapper: `flex flex-col items-center container-lg text-[#e5e8eb]`,
@@ -72,9 +74,14 @@ const Nft = () => {
             </div>
             <div className={style.detailsContainer}>
               <GeneralDetails selectedNft={selectedNft} />
+              <Purchase
+                isLited={router.query.isLited}
+                selectedNft={selectedNft}
+                listings={listings}
+                marketPlaceModule={marketPlaceModule}/>
             </div>
           </div>
-          <ItemActivity/>
+          <ItemActivity />
         </div>
       </div>
     </div>
