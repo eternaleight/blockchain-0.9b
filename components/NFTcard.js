@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BiHeart } from 'react-icons/bi'
 import Router from 'next/router'
 
@@ -31,19 +31,9 @@ const NFTCard = ({ nftItem, title, listings }) => {
     }
   }, [listings, nftItem])
 
-
-  useEffect(() => {
-    for (const listing of listings) {
-      if (listing.asset.id === nftItem.id) {
-        setIsListed(true)
-        setPrice(listing.buyoutCurrencyValuePerToken.displayValue)
-        break
-      }
-    }
-  }, [listings, nftItem])
-
   return (
-    <div className={style.wrapper}
+    <div
+      className={style.wrapper}
       onClick={() => {
         Router.push({
           pathname: `/nfts/${nftItem.id}`,
@@ -64,7 +54,11 @@ const NFTCard = ({ nftItem, title, listings }) => {
             <div className={style.infoRight}>
               <div className={style.priceTag}>Price</div>
               <div className={style.priceValue}>
-                <img src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" alt="eth" className={style.ethLogo} />
+                <img
+                  src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  alt="eth"
+                  className={style.ethLogo}
+                />
                 {price}
               </div>
             </div>
