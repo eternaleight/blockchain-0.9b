@@ -8,9 +8,7 @@ import Header from '../../components/Header'
 import { CgWebsite } from 'react-icons/cg'
 import { AiOutlineInstagram, AiOutlineTwitter } from 'react-icons/ai'
 import { HiDotsVertical } from 'react-icons/hi'
-import { networkInterfaces } from 'os'
 import NFTCard from '../../components/NFTCard'
-
 
 const style = {
   bannerImageContainer: `h-[20vh] w-screen overflow-hidden flex justify-center items-center`,
@@ -113,7 +111,7 @@ const Collection = () => {
     fetchCollectionData()
   }, [collectionId])
 
-  console.log(router.query.nftId)
+  console.log(router.query)
   console.log(router.query.collectionId)
   return (
     <div className='overflow-hidden'>
@@ -188,7 +186,7 @@ const Collection = () => {
                 <img src="https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg" alt="eth" className={style.ethLogo} />
                 {collection?.floorPrice}
               </div>
-              <div className={style.statName}>floorPrice</div>
+              <div className={style.statName}>floor price</div>
             </div>
             <div className={style.collectionStat}>
               <div className={style.statValue}>
@@ -200,18 +198,18 @@ const Collection = () => {
           </div>
         </div>
         <div className={style.midRow}>
-          <div className={style.description}>{collection?.description}
-          </div>
+          <div className={style.description}>{collection?.description}</div>
         </div>
-        <div className="flex flex-wrap">
-          {nfts.map((nftItem, id) => (
-            <NFTCard
+      </div>
+      <div className="flex flex-wrap ">
+        {nfts.map((nftItem, id) => (
+          <NFTCard
             key={id}
             nftItem={nftItem}
             title={collection?.title}
-            listings={listings}/>
-          ))}
-        </div>
+            listings={listings}
+          />
+        ))}
       </div>
     </div>
   )
